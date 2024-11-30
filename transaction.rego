@@ -1,4 +1,4 @@
-package transaction_service
+package transaction
 
 default allow_transaction = false
 

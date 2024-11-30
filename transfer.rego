@@ -1,4 +1,4 @@
-package transfer_service
+package transfer
 
 default allow_transfer = false
 

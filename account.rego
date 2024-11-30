@@ -1,4 +1,4 @@
-package account_service
+package account
 
 default allow_create_account = false
 
