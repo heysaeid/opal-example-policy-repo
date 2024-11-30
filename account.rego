@@ -14,8 +14,8 @@ allow_create_account {
     input.initial_balance <= 1000000000
     
     input.account_type == "saving" 
-    or input.account_type == "checking" 
-    or input.account_type == "business"
+    input.account_type == "checking" 
+    input.account_type == "business"
 }
 
 max_accounts_per_person = 3
@@ -30,10 +30,4 @@ allow_get_account_details {
     count(input.account_id) > 0
     
     input.is_authenticated == true
-}
-
-default allow_account_for_location = false
-
-allow_account_for_location {
-    contains(["Tehran", "Isfahan", "Mashhad"], input.customer_province)
 }

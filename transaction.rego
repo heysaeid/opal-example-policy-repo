@@ -13,17 +13,12 @@ allow_transaction {
     input.amount <= 500000000
 }
 
-allow_deposit {
-    contains(["saving", "checking", "business"], input.account_type)
-    
+allow_deposit {    
     input.daily_deposit_count < 10
 }
 
 allow_withdraw {
-    input.balance >= input.amount
-    
-    contains(["saving", "checking"], input.account_type)
-    
+    input.balance >= input.amount    
     input.daily_withdraw_count < 5
     
     (input.balance - input.amount) >= 10000
