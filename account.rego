@@ -1,33 +1,41 @@
 package account
 
-default allow_create_account = false
+default allow = false
 
-allow_create_account {
-    input.customer_age >= 18
-    
-    count(input.customer_name) > 2
-    count(input.customer_name) <= 50
-    
-    count(input.customer_national_code) == 10
-    
-    input.initial_balance >= 0
-    input.initial_balance <= 1000000000
-    
-    input.account_type == "saving" 
-    input.account_type == "checking" 
-    input.account_type == "business"
+allow {
+    is_role(user.id, "editor")
 }
 
-max_accounts_per_person = 3
-
-allow_create_account {
-    count([account | account = input.existing_accounts[_]; account.customer_national_code == input.customer_national_code]) < max_accounts_per_person
+is_role(user_id, role) {
+    role in data.result.users[user_id].roles
 }
 
-default allow_get_account_details = false
+allow {
+    user := input.user
+    permission := "create_account"
+    user_has_permission(user, permission)
+}
 
-allow_get_account_details {
-    count(input.account_id) > 0
-    
-    input.is_authenticated == true
+allow {
+    user := input.user
+    permission := "view_account"
+    user_has_permission(user, permission)
+}
+
+user_has_permission(user, permission) {
+    user.id == data.users[user.id]
+    #role_has_permission(user.role, permission)
+}
+
+role_has_permission("admin", _) {
+    true
+}
+
+role_has_permission("editor", permission) {
+    permission == "view_account" 
+	permission == "create_account"
+}
+
+role_has_permission("viewer", "view_account") {
+    true
 }
